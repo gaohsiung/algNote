@@ -16,9 +16,9 @@
 3. Code
 ```java
 class Solution {
-   public int solution(int[] nums) {
-
-   }
+    public int solution(int[] nums) {
+        
+    }
 }
 ```
 
