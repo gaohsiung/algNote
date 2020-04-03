@@ -1,7 +1,6 @@
 ## General Notes
 1. 第一条
 2. 
-----------
 ## Q1 (L???)
 1. Description
    - null
