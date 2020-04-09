@@ -1,1 +1,1 @@
-This is self learning notebook for algorithm.
+This is self learning notes for algorithm.
