@@ -23,7 +23,8 @@
 6. 套路
    - 2D matrix 最短路径，注意查重（L286，L542，L317，L417）
    - self-construct graph (L127)
-   - Tree level order traverse
+   - Tree level order traverse (L339)
+   - 趣味题
 ```java
 bfs(root) {
     new queue;
@@ -446,14 +447,80 @@ class Solution {
    -  两个bfs的推进取决于谁的size小，谁推进
    -  类似start end两边往中间走，当dict删完了说明start end之间无法转换
    -  时间复杂度：一样，只减了一些constant factor
-## L
+## L339
+1. Notes
+   - null
+2. Follow up
+   - L364
+     - one pass：每次加到目前的层的sum：
+     - total sum of 4 level = (levelsum1) + (levelsum1 + levelsum2) + (levelsum1 + levelsum2 + levelsum3) + (levelsum1 + levelsum2 + levelsum3 + levelsum4)
+### S1
+1. Ideas：
+   - bfs
+   - 每层poll出来，是integer加到levelsum里，不是则使用getList把nestList里的东西拿出来offer到queue里。
+   - 每层遍历完把levelSum*level加到result里
+   - visited？tree不用查重
+   - 时间复杂度：O(n)，tree的size
+   - 空间复杂度：O(n/2)，queue最大能放的就是tree最宽的level，也就是最大n/2（满tree最后一层个数）
+2. Code
+```java
+class Solution {
+    public int solution(int[] nums) {
+        
+    }
+}
+```
+## swap parking problem 停车位趣味题
+1. Notes
+   - A B _ C -> C _ B A
+   - 唯一操作是把A能移到空格位置：A _ -> _ A
+2. Follow up
+   - null
+### S1
+1. Ideas：
+   - bfs
+   - 图：
+     - V：停车状态，String[]
+     - E：从状态a到状态b，无向，权值为1
+2. Code
+```java
+class Solution {
+    public int solution(int[] nums) {
+        
+    }
+}
+```
+## 使用多个量筒得到某量的水
+1. Notes
+   - 倒水过程：a接满，b接满，a倒空，b倒空，a倒到b，b倒到a。（6个叉）
+2. Follow up
+   - null
+### S1
+1. Ideas：
+   - bfs
+   - 图：
+     - V：杯子状态 int[2]。（有限量可以使用一个integer，前16位bit存1杯，后16位存1杯）
+     - E：一次倒水过程
+   - 任意杯子得到target
+2. Code
+```java
+class Solution {
+    public int solution(int[] nums) {
+        
+    }
+}
+```
+## L752
 1. Notes
    - null
 2. Follow up
    - null
 ### S1
 1. Ideas：
-   - null
+   - bfs
+   - 图：
+     - V：锁的状态
+     - E：八种转换关系，第一/二/三/四位上/下，无向，权值为1
 2. Code
 ```java
 class Solution {
