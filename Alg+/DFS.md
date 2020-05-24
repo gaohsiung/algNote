@@ -127,7 +127,9 @@ class Solution {
 1. Notes
    - null
 2. Follow up
-   - null
+   - 求任意一个最少删除的解
+     - 使用stack
+     - 不使用stack，两pass
 ### S1
 1. Ideas：
    - 搜索问题
@@ -207,10 +209,54 @@ class Solution {
 ```
 ## L93
 1. Notes
-   - null
 2. Follow up
    - L282
      - 拼数分叉
+     - calculator相关的题
+       - 只有+ -，one pass
+       - 有 + - *，one pass，存last value，a + b*c = (a+ b - b) + b * c (last value is b); a + b * c * d = (a + bc - bc) + bc * d (last value = b*c)
+       - 有 + - （ ）：使用stack
+       - 有 + - * （ ）：使用stack以及last value
+     - 时间复杂度：三叉（+-*）树，O(3^n)
+     - 空间复杂度：O(n) （path+栈空间）
+```java
+public List<string> eval(String s, int target) {
+    //cc
+
+    List<String> res = new LinkedList<>();
+    dfs(res, new StringBuilder,s, 0, 0, 0, target);
+    return res;
+}
+private void dfs(List<String> res, StringBuilder path, String s, int idx, int sum, int lastVal, int target) {
+    int len = s.length();
+    if (idx == len){
+        if (sum == target) {
+            res.add(path.toString());
+            return;
+        }
+
+        for (int i = idx; i < len; i++) {
+            int pathLen = path.length();
+            if (pathLen != 0) {
+                val = val * 10 + (s.charAt(i) - '0');
+                path.append('+'+val);
+                dfs(res, path, s, i+1, sum + val, val, target);
+                path.setLength(pathLen);
+                path.append('-'+val);
+                dfs(res, path, s, i+1, sum - val, -val, target); // 注意这里lastVal
+                path.setLength(pathLen);
+                path.append('*'+val);
+                dfs(res, path, s, i+1, (sum - lastVal) + lastVal * val, lastVal * val, target);
+                path.setLength(pathLen);
+            } else {
+                path.append(val);
+                dfs(res, path, s, i+1, sum + val, val, target);
+                path.setLength(pathLen);
+            }
+        }
+    }
+}
+```
    - word break的dfs做法
 ### S1
 1. Ideas：
@@ -253,6 +299,134 @@ class Solution {
     }
 }
 ```
+## L320
+1. Notes
+   - null
+2. Follow up
+   - null
+### S1
+1. Ideas：
+   - 先找出res的个数，一共2^n，因为每个位置有字母和数字两种情况：
+     - e.g. abc有 abc, ab1, a1c, a11(a2); 1bc,1b1, 11c(2c), 111(3)
+     - 类似L22，每次选择字母还是数字
+     - 注意合并，a11 -> a2
+   - 时间复杂度：O(2^n)
+2. Code
+```java
+class Solution {
+    public List<String> solution(String word) {
+        // cc
+
+        List<String> res = new LinkedList<>();
+        dfs(res, new StringBuilder(), word, 0, 0);
+        return res;
+    }
+    private void dfs(List<String> res, StringBuilder path, String s, int idx, int cnt) {
+        int len = s.length();
+        int pathLen = path.length();
+        if (idx == len) {
+            if (cnt != 0) {
+                path.append(cnt);
+            }
+            res.add(path.toString());
+            path.setLength(pathLen);
+            return;
+        }
+
+        // no fail cases
+        
+        // change char to digit
+        dfs(res, path, s, idx + 1, cnt + 1);
+
+        // append char
+        if (cnt != 0) {
+            path.append(cnt);
+        }
+        dfs(res, path, s, idx + 1, 0);
+        path.setLength(pathLen);
+    }
+}
+```
+## L488
+1. Notes
+   - null
+2. Follow up
+   - null
+### S1
+1. Ideas：
+   - 如果bfs
+     - minimum -> 最短路径问题
+     - V：board和hand的状态（PQ存了两个string，有点繁琐
+     - E：状态转换，有向边，权值不为一（不好做
+     - 一个球到空，权值为2；不可以一个球先到两个球的状态，因为这个违背了bfs 最短路径，这里增加了球
+2. Code
+```java
+class Solution {
+    public int solution(String board, String hand) {
+        
+    }
+
+    private int dfs(String board, HashMap<String, Intger> hand) {
+        int len = board.length();
+        if (len == 0) {
+            return 0;
+        }
+        if (hand.size() == 0) {
+            return Integer.MAX_VALUE; // 注意越界问题
+        }
+
+        for (int i = 0; i < len; i++) {
+            char ch = board.charAt(i);
+            Integer cnt = hand.get(ch);
+            if (cnt == null) continue;
+            if (i + 1 < len && s[i+1] == ch) {
+                int newCnt = cnt - 1;
+                if (newCnt == 0) {
+                    hand.remove(ch);
+                }
+                String newBoard = convert(board, i-1, i+2);
+                min = Math.min(min, dfs(newBoard, hand) + 1); // 注意越界问题
+                hand.put(ch, cnt);
+            } else if (cnt >= 2) { // 和上面合并成一个helper function
+                int newCnt = cnt - 2;
+                if (newCnt == 0) {
+                    hand.remove(ch);
+                }
+                String newBoard = convert(board, i-1, i+1);
+                min = Math.min(min, dfs(newBoard, hand) + 2); // 注意越界问题
+                hand.put(ch, cnt);
+            }
+        }
+        return min;
+    }
+
+    private String convert(String board, int i, int j) {
+        int len = board.length();
+        while (i >= 0 && j < len) {
+            char ch = board.charAt(i);
+            int left = i;
+            while (left >= 0 && board.charAt(left) == ch) {
+                left --;
+                cnt ++;
+            }
+            int right = j;
+            while (right < len && board.charAt(right) == ch) {
+                right ++;
+                cnt ++;
+            }
+            if (cnt >= 3) {
+                i = left;
+                j = right;
+            } else {
+                break;
+            }
+        }
+        return board.subString(0, i + 1) + board.subString(j, board.length());
+    }
+}
+```
+
+
 
 
 
