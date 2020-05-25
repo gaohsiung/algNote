@@ -359,6 +359,10 @@ class Solution {
      - V：board和hand的状态（PQ存了两个string，有点繁琐
      - E：状态转换，有向边，权值不为一（不好做
      - 一个球到空，权值为2；不可以一个球先到两个球的状态，因为这个违背了bfs 最短路径，这里增加了球
+   - 这个special case：RRWWRRBBRR，hand：WB
+     - 先RRWWRRBBR(W)R，得到RRWWRRBBRWR，再RRWWRRB(B)BRWR，可以清掉
+     - 长度变长了
+     - 很难从逻辑上handle
 2. Code
 ```java
 class Solution {
