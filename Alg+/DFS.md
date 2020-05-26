@@ -10,6 +10,7 @@
 ReturnType dfs(cur, <visited?>) {
     //base case: search success
     //base case: search fail
+    // 有时候success和fail的情况可以并到for loop里call 完dfs之后就直接处理，这时候有prev的信息，相对比较好处理
     set visited to true?
     for (each_branch) {
         // update value/state
