@@ -5,7 +5,10 @@
    - key：搜索状态，e.g. index, String才可以pruning，而array[] array[][] 或者hashmap可能不行
    - value：dfs返回值 boolean，int可以pruning，而void（all possible solution)不行
 3. 常用pruning：int[], int[][], boolean[], boolean[][], hashmap<String, in / boolean>
-4. dfs + pruning有些可以直接转dp，有些不行
+4. dfs + pruning有些可以直接转dp，有些不行，例如：
+   - 不是index，不好顺序填值，像是string
+   - 离散的搜索状态时使用hashmap （L403)
+   - 没有顺序填值（L329)
 5. 时间复杂度：dfs+ pruning 等价于dp的level
 ## L139
 1. Notes
@@ -190,6 +193,9 @@ class Solution {
 ### S1
 1. Ideas：
    - dfs
+   - pruning，离散状态，使用hashmap。如果使用2d array，由于离散，空间很浪费
+   - dp? 不合适，hashmap很难实现；如果是2d array，可以，但是依旧浪费空间
+   - 时间复杂度：n*k，每次填表，for loop amortizing到nk的任一位置
 2. Code
 ```java
 class Solution {
@@ -197,14 +203,15 @@ class Solution {
         
     }
 
-    private boolean dfs(int[] stones, int idx, int k) {
+    private boolean dfs(int[] stones, int idx, int k, HashMap<Integer, Boolean>[] mem) {
         int len = stones.length();
         if (idx == len - 1) {
             return true;
         }
-        if (idx >= len) {
-            return false;
-        }
+        HashMap<Integer, Boolean> map = mem[idx];
+        Boolean ret = map.get(k);
+        if (ret != null) return ret;
+
 
         for (int i = idx + 1; i < len; i++) {
             int dist = stones[i] - stones[j];
@@ -213,95 +220,179 @@ class Solution {
                 break;
             } else {
                 if (dfs(stones, i, dist)) {
+                    map.put(k, true);
                     return true;
                 }
             }
         }
+        map.put(k, false);
         return false;
     }
 }
 ```
-## L
+## L329
 1. Notes
-   - null
+   - clarify：初始地点，方向上下左右？
+   - strictly increase
 2. Follow up
-   - null
+   - 强行使用dp：
+     - 把2d排序，转换为1d array
+     - ![001](Fig001.png)
+     - 1d array存所有的index
+     - 从头开始填值，到每到一个i，j，看上下左右是否有填过，填填过中的最大的
+     - 这里排序就能保证之前的都有了，可以顺序填值，而且不会有问题
+   - 任意最长路径
+     - 使用hashmap记录路径，cur的index -> prev的index，key是int[2]，value也是int[2]
+   - 所有最长路径
+     - hashmap，key是当前cur的index，value是个list，之前能够到达cur的所有index
+   - 只能往下和往右
+     - 可以顺序填值，所以可以使用dp
 ### S1
 1. Ideas：
-   - null
+   - dfs+pruning
+   - 这里dp不可以，主要原因是每个位置取决于4个方向，对于dp[i][j]来说，四个方向都有可能作为来源，而dp是有小到大填值，i和j之前的都要填好，四方都有可能的情况是不可能都填好的，所以不行
+   - 时间复杂度：
+     - 主函数 两个for loop，第一次dfs是mn，之后所有的dfs都是O(1)，因为有pruning
+     - 所以是O(mn + mn-1)
 2. Code
 ```java
 class Solution {
-    public int solution(int[] nums) {
-        
+    public int solution(int[][] matrix) {
+        //cc
+        int max = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                max = Math.max(max, dfs(matrix, i, j, Intger.MIN_VALUE));
+            }
+        }
+        return max;
+    }
+    private int dfs(int[][] matrix, int i, int j, int[][] mem) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        if (i < 0 || i >= row || j < 0 || j >= col) {
+            return 0;
+        }
+        if (mem[i][j] > 0) return mem[i][j];
+        int max = 0;
+        if (matrix[i-1][j] > matrix[i][j]) {
+            int max = Math.max(max, dfs(matrix, i-1, j);
+        }
+        if (matrix[i+1][j] > matrix[i][j]) {
+            int max = Math.max(max, dfs(matrix, i+1, j);
+        }
+        if (matrix[i][j-1] > matrix[i][j]) {
+            int max = Math.max(max, dfs(matrix, i, j-1);
+        }
+        if (matrix[i][j+1] > matrix[i][j]) {
+            int max = Math.max(max, dfs(matrix, i, j+1);
+        }
+        mem[i][j] = max + 1;
+        return mem[i][j];
     }
 }
 ```
-## L
+## L294
 1. Notes
    - null
 2. Follow up
    - null
 ### S1
 1. Ideas：
-   - null
+   - dfs
+   - pruning
+   - dp不行，因为搜索状态是string，同时使用了hashmap，不是顺序填值
+   - 时间复杂度：2^n，一共要填一个2^n size的mem
+   - 不超过32的board，一个integer表示board
 2. Code
 ```java
 class Solution {
-    public int solution(int[] nums) {
-        
+    public boolean canWin(String s) {
+        //cc
+        HashMap<String, Boolean> mem = new HashMap<>();
+        return dfs(board.toCharArray(), mem);
+    }
+    private boolean dfs(char[] board, HashMap<String, Boolean> mem) {
+        if(canNotFlip(board)) {
+            return false;
+        }
+
+        String str = String.valueOf(board);
+        Boolean val = mem.get(str);
+        if (val != null) return val;
+
+        for (int i = 0; i < len - 1; i++) {
+            if (board[i] == '+' && board[i+1] == '+') {
+                board[i] = '-';
+                board[i+1] = '-';
+                if (!dfs(board)){
+                    mem.put(String.valueOf(board), true);
+                    return true;
+                }
+                board[i] = '+';
+                board[i+1] = '+';
+            }
+        }
+        mem.put(str, false);
+        return false;
     }
 }
 ```
-## L
+## L464
 1. Notes
    - null
 2. Follow up
    - null
 ### S1
 1. Ideas：
-   - null
+   - dfs
+   - pool的size是maxChoosableInteger
+   - maxChoosableInteger不大于20，可以使用一个Integer表示pool
+   - pruning：使用一个Integer表示pool，同时curSum是辅助用，可以通过pool推断
+   - 无法dp，因为不能顺序填值
+   - 时间复杂度：O(2^20)
 2. Code
 ```java
 class Solution {
-    public int solution(int[] nums) {
+    public boolean canIWin(int maxChoosableInt, int desiredTotal) {
         
     }
-}
-```
-## L
-1. Notes
-   - null
-2. Follow up
-   - null
-### S1
-1. Ideas：
-   - null
-2. Code
-```java
-class Solution {
-    public int solution(int[] nums) {
-        
+    private boolean dfs(boolean[] pool, int curSum, int maxChoosableInt, int desiredTotal) {
+        if (curSum > desiredTotal) return false;
+
+        for (int i = 1; i < pool.length; i++) {
+            if (pool[i]) {
+                pool[i] = false;
+                boolean ret = dfs(pool, curSum + i, desiredTotal);
+                pool[i] = true;
+                if (!ret) {
+                    return true;
+                }
+
+
+            }
+        }
+    }
+    private boolean dfs(int pool, int curSum, int maxChoosableInt, int desiredTotal, Boolean[] mem) {
+        if (curSum > desiredTotal) return false;
+        if (mem[pool] != null) return mem[pool];
+
+        for (int i = 0; i < maxChoosableInt;i++) {
+            int mask = 1 << i;
+            if (pool & mask != 0) {
+                curSum += i+1;
+                int newPool = pool - mask;
+                if (!dfs(newPool, curSum, maxChoosableInt, desiredTotal)){
+                    mem[pool] = true;
+                    return true;
+                }
+            }
+        }
+        mem[pool] = false;
+        return false;
     }
 }
 ```
 
-
-## L
-1. Notes
-   - null
-2. Follow up
-   - null
-### S1
-1. Ideas：
-   - null
-2. Code
-```java
-class Solution {
-    public int solution(int[] nums) {
-        
-    }
-}
-```
 
 
