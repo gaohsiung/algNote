@@ -107,7 +107,7 @@ class Solution {
     }
 }
 ```
-## L
+## 一排球取球游戏
 1. Notes
    - 一排球，每个球有val，两个玩家轮流从左边拿1个或者2个，是否能guarantee 先手玩家获胜
 2. Follow up
@@ -130,35 +130,106 @@ class Solution {
     }
 }
 ```
-## L
+## L121 stock
 1. Notes
    - null
 2. Follow up
-   - null
+   - L123
+   - L188
+   - L122
+   - L714
+   - L309
 ### S1
 1. Ideas：
-   - null
+   - Greedy
 2. Code
 ```java
-class Solution {
-    public int solution(int[] nums) {
-        
+class L121 {
+    public int sotck1(int[] prices) {
+       //cc
+
+       int minP = Integer.MAX_VALUE;
+       int max = 0;
+       for (int p: prices) {
+          max = Math.max(max, p - minP);
+          minP = Math.min(minP, p);
+       }
+       return max; 
     }
 }
 ```
-## L
+### S2
+1. Ideas：
+   - dp
+   - 分叉，买卖和啥也不干
+   - int buy[i] [0, i) 买的最大profit = max(buy[i-1], 0 - prices)，max（不买，买）
+   - int sell[i] [0, i) 卖的最大profit = max（sell[i-1], buy[i-1] + price[i])，max（不卖，卖）
+2. Code
+```java
+class L121 {
+    public int sotck1(int[] prices) {
+       //cc
+
+       for (p: prices) {
+          sell = Math.max(sell, buy+p); //先卖后买，不然这里的buy就是新的buy了，我们要referprev的buy
+          buy = Math.max(buy, -p);
+       }
+
+       
+    }
+}
+```
+### S1 L123
+1. Ideas：
+   - 买卖两次股票，其中第二次一定要在第一只卖掉才能买
+   - DP
+   - sell2[i] = max(sell2[i-1], price[i] + buy2[i-1])
+   - buy2[i] = max(buy2[i-1], sell1[i] - price[i]);
+   - sell1[i] = max(sell1[i-1], price[i] + buy1[i-1])
+   - 当前买的最大profit，buy1[i] = max（buy1[i-1]，-price[i])
+### S1 L188
+1. Ideas：
+   - sell[k][i]: [0,i) 第k卖的max profit = max(sell[k][i-1], buy[k][i-1] + price[i])
+   - buy[k][i]: [0,i) 第k买的max profit = max(buy[k][i-1], sell[k-1][i-1] - prices[i])
+### S1 L122
+1. Ideas：
+   - buy[i] = max(buy[i-1], sell[i-1] - p)
+   - sell[i] = max(sell[i-1], buy[i-1] + p)
+### S1 L714
+1. Ideas：
+   - buy[i] = max(buy[i-1], sell[i-1] - p[i])
+   - sell[i] = max(sell[i-1], buy[i-1] + p[i] - fee)
+### S1 L309
+1. Ideas：
+   - buy[i] = max(buy[i-1], sell[i-2] - p[i]) // cooldown 1 day
+   - sell[i] = max(sell[i-1], buy[i-1] + p[i])
+## L97
 1. Notes
    - null
 2. Follow up
    - null
 ### S1
 1. Ideas：
-   - null
+   - dp
+   - s1 i，s2 j, s3 k
+   - i和j都不等于k，直接return false
+   - i和j只有一个i等于k，则要做s1[i-1] s2[j]和s3[k-1]的相同问题。同理只有一个j
+   - i和j都等于k，要分叉，即做s1[i-1] s2[j]和s3[k-1] 和s1[i] s2[j-1]和s3[k-1], 这两个结果只要一个true就行，即使用or连接
 2. Code
 ```java
 class Solution {
-    public int solution(int[] nums) {
-        
+    public int solution(String s1, String s2, String s3) {
+        //cc
+        dp[0][x] = s2.subString(0,x).equals(s2.subString(0, x));
+        dp[y][0] = s1.subString(0,y).equals(s2.subString(0, y));
+        for(i = 0; i < len1; i++) {
+           for (j = 0; j<len2; j++) {
+              k = i+j+1;
+              dp[i+1][j+1] = false;
+              if (s1[i] == s3[k]) dp[i+1][j+1] = dp[i][j+1];
+              if (s1[j] == s3[k]) dp[i+1][j+1] = dp[i+1][j];
+           }
+        }
     }
 }
 ```
