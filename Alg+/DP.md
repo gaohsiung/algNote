@@ -233,102 +233,18 @@ class Solution {
     }
 }
 ```
-## L
+## L115
 1. Notes
-   - null
+   - T: 被match的string，S：找match T的string
 2. Follow up
    - null
 ### S1
 1. Ideas：
-   - null
-2. Code
-```java
-class Solution {
-    public int solution(int[] nums) {
-        
-    }
-}
-```
-## L
-1. Notes
-   - null
-2. Follow up
-   - null
-### S1
-1. Ideas：
-   - null
-2. Code
-```java
-class Solution {
-    public int solution(int[] nums) {
-        
-    }
-}
-```
-## L
-1. Notes
-   - null
-2. Follow up
-   - null
-### S1
-1. Ideas：
-   - null
-2. Code
-```java
-class Solution {
-    public int solution(int[] nums) {
-        
-    }
-}
-```
-## L
-1. Notes
-   - null
-2. Follow up
-   - null
-### S1
-1. Ideas：
-   - null
-2. Code
-```java
-class Solution {
-    public int solution(int[] nums) {
-        
-    }
-}
-```
-## L
-1. Notes
-   - null
-2. Follow up
-   - null
-### S1
-1. Ideas：
-   - null
-2. Code
-```java
-class Solution {
-    public int solution(int[] nums) {
-        
-    }
-}
-```
+   - dp
+   - 搜索分叉，两个string，i j不等，直接跳过；相等，可以匹配，也可以不匹配
+   - dp[i][j] T的[0, i)和S的[0, j) 的total subsequence
+   - dp[i][j] = dp[i][j-1] 如果i和j不相等
+   -          = dp[i, j-1] (尽管i j相等，但不match) + dp[i - 1, j - 1] (match) i j相等
 
-## L
-1. Notes
-   - null
-2. Follow up
-   - null
-### S1
-1. Ideas：
-   - null
-2. Code
-```java
-class Solution {
-    public int solution(int[] nums) {
-        
-    }
-}
-```
 
 
