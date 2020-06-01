@@ -37,3 +37,12 @@
 ### S1
 1. Ideas：
    - 能种就种
+## L44
+1. Notes
+   - 
+2. Follow up
+   - null
+### S1
+1. Ideas：
+   - greedy
+   - http://techbow.com/app/lesson/5e860e934881173f399b36d9
