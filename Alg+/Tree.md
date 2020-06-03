@@ -149,7 +149,44 @@ private int getHeight(TreeNode root){
     return cnt;
 }
 ```
-## L
+## L241
+1. Notes
+   - 不要求去重
+   - 符号固定
+2. Follow up
+   - 数学表达式转为syntax tree
+     - 使用两个stack，一个符号stack（TreeNode），一个数字stack（TreeNode）
+   - 找所有值得最大值
+     - dp，dp[start][end] = {max, min}
+### S1
+1. Ideas：
+   - construct 不同的syntax tree，计算由下到上
+2. Code
+```java
+private List<Integer> dfs(String input, int start, int end) {
+
+    List<Integer> res = new ArrayList<>();
+    boolean isNum = true;
+    for (int i = start; i <= end; i++) {
+        char ch = input.charAt(i);
+        if (ch == '+' || ch == '-' || ch == '*') {
+            isNum = false;
+            List<Integer> lefts = dfs(input, start, i-1);
+            List<Integer> rights = dfs(input, i+1, end);
+            for (Integer l: lefts) {
+                for (Integer r: rights) {
+                    res.add(calculate(ch, l, r));
+                }
+            }
+        }
+    }
+    if (isNum) {
+        res.add(Integer.valueOf(intput.subString(start, end+1)));
+    }
+    return res;
+}
+```
+## L250
 1. Notes
    - null
 2. Follow up
@@ -157,22 +194,62 @@ private int getHeight(TreeNode root){
 ### S1
 1. Ideas：
    - null
-## L
+2. Code
+```java
+private boolean dfs(TreeNode root, int target, int[] count) {
+    if (root == null) {
+        return true;
+    }
+    if (!dfs(root.left, root.val) || !dfs(root.right, root.val)) {
+        return false;
+    }
+    count[0]++;
+    return root.val == target;
+}
+```
+## L298
+1. Notes
+   - null
+2. Follow up
+   - 可以左子树到右子树形成最长序列
+     - 左 -1 or +1
+     - 右 -1 or +1
+     - 返回两个值
+   - 返回具体最长路径
+     - 使用hashmap记录每个pair，同时记录最长连续序列的出发点
+### S1
+1. Ideas：
+   - dfs，一次遍历找到最长连续
+2. Code
+```java
+int globalMax = Integer.MIN_VALUE;
+private int dfs(TreeNode) { // 以root为根的最长连续
+    if (root == null) {
+        return 0;
+    }
+    ret = 1;
+    if (root.left != null && root.val + 1 == root.left.val) {
+        ret = left + 1;
+    }
+    if (root.right != null && root.val + 1== root.right.val) {
+        ret = Math.max(ret, right + 1);
+    }
+    globalMax = Math.max(globalMax, ret);
+    return ret;
+}
+```
+## L333
 1. Notes
    - null
 2. Follow up
    - null
 ### S1
 1. Ideas：
-   - null
-## L
-1. Notes
-   - null
-2. Follow up
-   - null
-### S1
-1. Ideas：
-   - null
+   - 使用一个3 size的array记录左子树或者右子树的最小最大，和如果是bst的size，作为返回值
+   - 这里是3 size，最好wrap 成class，大于2个不管是相同type还是不同type，都wrap成class
+   - 注意base case，如果是null，直接return null
+   - 当前TreeNode返回最小最大值时，注意判断左右子树是否有null的情况，是null返回root.val，不是再比较
+
 
 
 
