@@ -11,6 +11,6 @@ public class ListNode {
         ListNode l3 = new ListNode(3, l4);
         ListNode l2 = new ListNode(2, l3);
         ListNode l1 = new ListNode(1, l2);
-        l1.val = 1;
+
     }
 }

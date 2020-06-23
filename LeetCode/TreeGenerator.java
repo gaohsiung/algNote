@@ -1,6 +1,32 @@
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class TreeGenerator { // LC449
+
+    //Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "#";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            TreeNode cur = queue.poll();
+
+            if (cur == null) {
+                sb.append("#,");
+            } else {
+                sb.append(cur.val + ",");
+                queue.offer(cur.left);
+                queue.offer(cur.right);
+            }
+        }
+        return sb.toString();
+    }
+
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
@@ -40,29 +66,11 @@ public class TreeGenerator { // LC449
         }
 
         return root;
-
     }
+
     public static void main(String[] args) {
         TreeGenerator tg = new TreeGenerator();
-        TreeNode root = tg.deserialize("[1,2,5,3,4,#,6]");
-        System.out.println(root.val);
+        TreeNode root = tg.deserialize("[1,2,null, 3]");
+        System.out.println(tg.serialize(root));
     }
-
 }
-
-class TreeNode {
-	
-	public int val;
-	public TreeNode left, right;
-	
-	public TreeNode(int val) {
-		this.val = val;
-		this.left = null;
-		this.right = null;
-	}
-
-}
-
-
-
-
