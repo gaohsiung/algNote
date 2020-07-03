@@ -3,74 +3,63 @@ import java.util.Queue;
 
 public class TreeGenerator { // LC449
 
-    //Encodes a tree to a single string.
+    // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
         if (root == null) {
-            return "#";
+            return "";
         }
-
         StringBuilder sb = new StringBuilder();
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);
-
-        while (!queue.isEmpty()) {
-            TreeNode cur = queue.poll();
-
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        while (!q.isEmpty()) {
+            TreeNode cur = q.poll();
             if (cur == null) {
-                sb.append("#,");
-            } else {
-                sb.append(cur.val + ",");
-                queue.offer(cur.left);
-                queue.offer(cur.right);
+                sb.append("n,");
+                continue;
             }
+            sb.append(String.valueOf(cur.val));
+            sb.append(",");
+            q.offer(cur.left);
+            q.offer(cur.right);
         }
+        sb.setLength(sb.length() - 1);
         return sb.toString();
+
     }
 
-
     // Decodes your encoded data to tree.
-    public TreeNode deserialize(String data) {
-        String ss[] = data.split(",");
-        if (ss.length == 0) {
-            throw new IllegalArgumentException();
-        }
-        if (ss.length == 1 && ss[0].equals("#")) {
+    public TreeNode deserialize(String s) {
+        if (s.equals("")) {
             return null;
         }
-
-        TreeNode root = new TreeNode(Integer.valueOf(ss[0]));
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);
+        String[] vals = s.split(",");
+        TreeNode root = new TreeNode(Integer.parseInt(vals[0]));
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
         int i = 1;
-        while (i < ss.length) {
-            TreeNode cur = queue.poll();
-
-            TreeNode left =
-                   ss[i].equals("#")
-                        ? null : new TreeNode(Integer.valueOf(ss[i]));
-            TreeNode right =
-                   (++i >= ss.length || ss[i].equals("#"))
-                        ? null : new TreeNode(Integer.valueOf(ss[i]));
-
-            cur.left = left;
-            cur.right = right;
-
-            if (left != null) {
-                queue.offer(left);
+        while(i < vals.length) {
+            TreeNode cur = q.poll();
+            if (!(vals[i]).equals("n")) {
+                cur.left = new TreeNode(Integer.parseInt(vals[i]));
+                q.offer(cur.left);
+            } else {
+                cur.left = null;
             }
-            if (right != null) {
-                queue.offer(right);
+            i++;
+            if (!(vals[i]).equals("n")) {
+                cur.right = new TreeNode(Integer.parseInt(vals[i]));
+                q.offer(cur.right);
+            } else {
+                cur.right = null;
             }
-
             i++;
         }
-
         return root;
     }
 
     public static void main(String[] args) {
         TreeGenerator tg = new TreeGenerator();
-        TreeNode root = tg.deserialize("[1,2,null, 3]");
+        TreeNode root = tg.deserialize("1,2,3,n,n,n,n");
         System.out.println(tg.serialize(root));
     }
 }
