@@ -78,3 +78,46 @@ class Solution {
 }
 // @lc code=end
 
+// another solution
+// public List<List<Integer>> verticalOrder(TreeNode root) {
+//     List<List<Integer>> res = new LinkedList<>();
+//     if (root == null) {
+//         return res;
+//     }
+//     // initialize q
+//     Queue<TreeNode> q = new LinkedList<>();
+//     q.offer(root);
+//     // helper hashmap
+//     int leftMostKey = 0;
+//     Map<Integer, List<Integer>> addResult = new HashMap<>();
+//     Map<TreeNode, Integer> getVerticalIndex = new HashMap<>();
+//     addResult.put(0, new LinkedList<Integer>());
+//     addResult.get(0).add(root.val);
+//     getVerticalIndex.put(root, 0);
+//     while(!q.isEmpty()) {
+//         TreeNode cur = q.poll();
+//         int curVerticalIndex = getVerticalIndex.get(cur);
+//         if(cur.left != null) {
+//             getVerticalIndex.put(cur.left, curVerticalIndex - 1);
+//             if(!addResult.containsKey(curVerticalIndex - 1)) {
+//                 addResult.put(curVerticalIndex - 1, new LinkedList<Integer>());
+//             }
+//             addResult.get(curVerticalIndex - 1).add(cur.left.val);
+//             leftMostKey = Math.min(curVerticalIndex - 1, leftMostKey);
+//             q.offer(cur.left);
+//         }
+//         if (cur.right != null) {
+//             getVerticalIndex.put(cur.right, curVerticalIndex + 1);
+//             if(!addResult.containsKey(curVerticalIndex + 1)) {
+//                 addResult.put(curVerticalIndex + 1, new LinkedList<Integer>());
+//             }
+//             addResult.get(curVerticalIndex + 1).add(cur.right.val);
+//             q.offer(cur.right);
+//         }
+//     }
+//     for(int i = leftMostKey; addResult.containsKey(i); i++) {
+//         res.add(addResult.get(i));
+//     }
+//     return res;
+// }
+
