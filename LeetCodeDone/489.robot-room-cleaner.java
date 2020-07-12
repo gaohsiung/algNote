@@ -51,7 +51,7 @@ class Solution {
     }
 
     public void cleanRoom(Robot robot) {
-        dfs(robot, 0, 0, new HashSet<Cell>());
+        dfs(robot, 0, 0, 0, new HashSet<Cell>());
 
     }
     private void goBack(Robot robot) {
@@ -61,8 +61,21 @@ class Solution {
         robot.turnRight();
         robot.turnRight();
     }
-    private void dfs(Robot robot, curX, curY, HashSet<Cell>() visited) {
-        
+    private void dfs(Robot robot, int curX, int curY, int dir, HashSet<Cell> visited) {
+        robot.clean();
+        visited.add(new Cell(curX, curY));
+
+        for(int i = 0; i < 4; i++) {
+            int newDir = (dir + i) % 4;
+            int newX = DIRECTIONS[newDir][0] + curX;
+            int newY = DIRECTIONS[newDir][1] + curY;
+            if (!visited.contains(new Cell(newX, newY)) && robot.move()) {
+                dfs(robot, newX, newY, newDir, visited);
+                goBack(robot);
+            }
+            robot.turnRight();
+        }
+
 
     }
 
