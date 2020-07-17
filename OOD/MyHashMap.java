@@ -155,9 +155,12 @@ public class MyHashMap<K,V> {
         System.out.println(map.get(1));
         map.put(1,2);
         System.out.println(map.get(1));
+        map.put(null,3);
+        System.out.println(map.get(null));
         map.remove(1);
         System.out.println(map.get(1));
         System.out.println("----------end-----------");
+        Map<Integer, Integer> map = new HashMap<>();
     }
 
 

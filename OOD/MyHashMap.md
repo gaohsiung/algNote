@@ -150,3 +150,14 @@ class MyMap<K,V> {
     }
 }
 ```
+8. iterator
+   - EntrySet
+9. MultiMap<Integer, String> <==> HashMap<Integer, List<String>>
+   - MultiMap.put(5, "a");
+   - MultiMap.put(5, "b");
+   - MultiMap.get(5); // ["a", "b"]
+   - asMap -> HashMap<K, List<V>>
+   - size
+10. Distributed hashMap <==> distributed cache
+   - in memory
+   - consistent hashing
