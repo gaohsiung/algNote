@@ -160,4 +160,4 @@ class MyMap<K,V> {
    - size
 10. Distributed hashMap <==> distributed cache
    - in memory
-   - consistent hashing
+   - consistent hashing with sharding
