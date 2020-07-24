@@ -1,3 +1,5 @@
+import java.util.*;
+
 /*
  * @lc app=leetcode id=324 lang=java
  *
@@ -7,8 +9,25 @@
 // @lc code=start
 class Solution {
     public void wiggleSort(int[] nums) {
-        int medianVal = getMedian(nums, 0, nums.length-1, nums.length/2);
-
+        int len = nums.length;
+        int medianVal = getMedian(nums, 0, len-1, len/2+1); // idx: len/2-1
+        List<Integer> ret = new ArrayList<>();
+        for(int i = 0; i < len/2; i++) {
+            ret.add(nums[i]);
+        }
+        if (len%2 == 1) {
+            for(int i = len/2+1; i < len; i++) {
+                ret.add(2*(i-(len/2)-1)+1, nums[i]);
+            }
+            ret.add(nums[len/2]);
+        } else {
+            for(int i = len/2; i< len; i++) {
+                ret.add(1+(i-len/2)*2,nums[i]);
+            }
+        }
+        for(int i = 0; i < len; i++) {
+            nums[i] = ret.get(i);
+        }
         return;
     }
 
@@ -48,7 +67,7 @@ class Solution {
     }
     public static void main(String[] args) {
         Solution sol = new Solution();
-        sol.wiggleSort(new int[]{11,7,5,2,4,1,18,3});
+        sol.wiggleSort(new int[]{4,5,5,6});
     }
 }
 // @lc code=end

@@ -1,0 +1,40 @@
+1. 拍卖鞋子网站
+2. user flow
+   - buyer
+     - login
+     - list popular shoes
+     - search shoes
+     - view shoes details
+     - bid shoes under given id
+     - buy shoes under given id
+     - View Buy History
+     - cancel bid
+   - seller
+     - login
+     - Add offer under shoes (given shoes id)
+     - request add new brand
+3. Core object
+   - User (buyer+seller)
+     - id
+     - name
+     - payment
+     - address
+   - Shoe
+     - id
+     - name
+     - brand
+     - color
+   - Brand
+     - id
+     - name
+     - description
+   - Order
+     - id
+     - created_at
+     - status
+   - offer
+     - id
+     - ask_price
+     - created_at
+     - size
+     - condition
