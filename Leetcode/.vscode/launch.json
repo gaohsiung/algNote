@@ -6,6 +6,13 @@
     "configurations": [
       {
         "type": "java",
+        "name": "CodeLens (Launch) - SnapshotArray",
+        "request": "launch",
+        "mainClass": "SnapshotArray",
+        "projectName": "Leetcode_5956b71d"
+      },
+      {
+        "type": "java",
         "name": "CodeLens (Launch) - MyCountList",
         "request": "launch",
         "mainClass": "MyCountList",
