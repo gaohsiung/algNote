@@ -6,6 +6,13 @@
     "configurations": [
       {
         "type": "java",
+        "name": "CodeLens (Launch) - MaxStack",
+        "request": "launch",
+        "mainClass": "MaxStack",
+        "projectName": "Leetcode_5956b71d"
+      },
+      {
+        "type": "java",
         "name": "CodeLens (Launch) - SnapshotArray",
         "request": "launch",
         "mainClass": "SnapshotArray",
