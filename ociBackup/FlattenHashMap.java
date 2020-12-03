@@ -28,12 +28,11 @@ class Solution {
         newSb.append(key);
         traverse(newSb, map.get(key), res);
       }
-    } else { // else stuff
+    } else { // else stuff: string, double, boolean
       String val = String.valueOf(value);
       res.put(prevKey.toString(), val);
     }
   }
-
 
   public static void main(String[] args) {
     HashMap<String, Object> json = new HashMap<>();
